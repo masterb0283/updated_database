@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 50px;
+        }
+
+        .dashboard-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .profile-details {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .profile-details span {
+            font-weight: bold;
+        }
+
+        .profile-image {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-image img {
+            border-radius: 50%;
+            max-width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .passport-box {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .passport-box img {
+            border-radius: 50%;
+            max-width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            width: 200px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .edit-form-container {
+            margin-top: 30px;
+            display: none; /* Hidden initially */
+        }
+
+        .edit-form input, .edit-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <h2>Welcome to Your Database Dashboard</h2>
+
+    <div id="error-message" class="error-message"></div>
+
+    <!-- Candidate Image -->
+    <div class="profile-image">
+        <img id="passportImage" src="" alt="Passport Image">
+    </div>
+
+    <!-- Profile Details -->
+    <div id="profile" class="profile-details">
+        <!-- Profile details will be dynamically populated here -->
+    </div>
+
+    <!-- Login ID Display -->
+    <div id="loginID">
+        <!-- Display the login ID here -->
+    </div>
+
+    <!-- Passport Display -->
+    <!-- <div class="passport-box">
+        <img id="passportDisplay" src="" alt="Passport Display">
+    </div> -->
+
+    <!-- Edit Form for Profile -->
+    <div class="edit-form-container" id="editForm">
+        <h3>Edit Your Profile</h3>
+        <form id="editProfileForm">
+            <div class="form-group">
+                <label for="editFullName">Full Name</label>
+                <input type="text" id="editFullName" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <label for="editState">State of Origin</label>
+                <input type="text" id="editState" placeholder="State of Origin" required>
+            </div>
+            <div class="form-group">
+                <label for="editAge">Age</label>
+                <input type="text" id="editAge" placeholder="Age" required>
+            </div>
+            <div class="form-group">
+                <label for="editJamb">JAMB Registration Number</label>
+                <input type="text" id="editJamb" placeholder="JAMB Registration Number" required>
+            </div>
+            <div class="form-group">
+                <label for="editSeatNumber">Seat Number</label>
+                <input type="text" id="editSeatNumber" placeholder="Seat Number" required>
+            </div>
+            <div class="form-group">
+                <label for="editPackage">Assistance Package</label>
+                <select id="editPackage" required>
+                    <option value="">Select Assistance Package</option>
+                    <option value="DIRECT TO SYSTEM">DIRECT TO SYSTEM PACKAGE</option>
+                    <option value="DIRECT TO MOBILE">DIRECT TO MOBILE PACKAGE</option>
+                    <option value="Merge Package">MERGE PACKAGE</option>
+                    <option value="Per Subject Package">PER SUBJECT PACKAGE</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editScore">Desired Score</label>
+                <input type="number" id="editScore" placeholder="Desired Score" required>
+            </div>
+            <div class="form-group">
+                <label for="editAmountPaid">Amount Paid</label>
+                <input type="number" id="editAmountPaid" placeholder="Amount Paid" required>
+            </div>
+            <div class="form-group">
+                <label for="editPaymentDetails">Payment Type</label>
+                <select id="editPaymentDetails" required>
+                    <option value="">Select Payment Type</option>
+                    <option value="Full Payment">Full Payment</option>
+                    <option value="Half Payment">Half Payment</option>
+                    <option value="Deposit Payment">Deposit Payment</option>
+                </select>
+            </div>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+    
+
+    <!-- Buttons -->
+    <div class="button-container">
+        <button onclick="editProfile()">Edit Profile</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<script>
+   const apiUrl = "https://674c915a54e1fca9290cf563.mockapi.io/Subscriber";
+
+// Function to fetch profile data
+function fetchProfile() {
+    const loginID = localStorage.getItem('subscriberLoginID');
+    if (!loginID) {
+        document.getElementById('error-message').innerText = 'No valid login ID found. Please log in again.';
+        return;
+    }
+
+    // Make API request to fetch the subscriber data by login ID
+    fetch(`${apiUrl}?loginID=${loginID}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Fetched Data:', data); // Debugging log to check the data fetched
+            if (data.length > 0) {
+                const subscriber = data[0]; // Get the first subscriber (should only be one)
+                displayProfile(subscriber);
+            } else {
+                document.getElementById('error-message').innerText = 'Profile not found.';
+            }
+        })
+        .catch(error => {
+            document.getElementById('error-message').innerText = 'An error occurred while fetching profile data.';
+            console.error('Error fetching profile:', error);
+        });
+}
+
+// Function to display profile details
+function displayProfile(subscriber) {
+    console.log("Displaying Profile:", subscriber);  // Debugging log
+
+    const placeholder = "path/to/placeholder/image.jpg"; // Update with your placeholder image path
+
+    document.getElementById('profile').innerHTML = `
+        <p><span>Full Name:</span> ${subscriber.fullName || 'N/A'}</p>
+        <p><span>State of Origin:</span> ${subscriber.stateOfOrigin || 'N/A'}</p>
+        <p><span>Age:</span> ${subscriber.age || 'N/A'}</p>
+        <p><span>JAMB Registration Number:</span> ${subscriber.jambregnumber || 'N/A'}</p>
+        <p><span>Seat Number:</span> ${subscriber.seatnumber || 'N/A'}</p>
+        <p><span>Assistance Package:</span> ${subscriber.assistancePackage || 'N/A'}</p>
+        <p><span>Desired Score:</span> ${subscriber.score || 'N/A'}</p>
+        <p><span>Amount Paid:</span> ${subscriber.amountPaid || 'N/A'}</p>
+        <p><span>Payment Type:</span> ${subscriber.paymentDetails || 'N/A'}</p>
+    `;
+    document.getElementById('loginID').innerHTML = `<p><span>Login ID:</span> ${subscriber.loginID}</p>`;
+
+    // Display the passport image if available, else use a placeholder
+    const passportUrl = subscriber.passport && subscriber.passport.length > 0 ? subscriber.passport : placeholder;
+    document.getElementById('passportImage').src = passportUrl;
+
+    // Save the updated profile to localStorage to immediately reflect changes
+    localStorage.setItem('subscriberProfile', JSON.stringify(subscriber));
+}
+
+
+// Function to handle logout (without clearing localStorage)
+function logout() {
+    // Redirect to login page without removing login ID
+    if (confirm('Are you sure you want to log out?')) {
+        window.location.href = 'index.html';  // Redirect to login page
+    }
+}
+
+// Function to display edit form
+function editProfile() {
+    const loginID = localStorage.getItem('subscriberLoginID');
+    if (!loginID) {
+        alert('No valid login ID found.');
+        return;
+    }
+
+    // Make API request to fetch the subscriber data by login ID
+    fetch(`${apiUrl}?loginID=${loginID}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Fetched Profile Data:', data); // Debugging log
+            if (data.length > 0) {
+                const subscriber = data[0]; // Get the first subscriber (should only be one)
+                fillEditForm(subscriber);
+                document.getElementById('editForm').style.display = 'block'; // Show edit form
+            } else {
+                alert('Profile not found.');
+            }
+        })
+        .catch(error => {
+            alert('An error occurred while fetching the profile.');
+            console.error('Error fetching profile:', error);
+        });
+}
+
+// function fillEditForm(subscriber) {
+//     document.getElementById('editFullName').value = subscriber.fullName;
+//     document.getElementById('editState').value = subscriber.stateOfOrigin;
+//     document.getElementById('editAge').value = subscriber.age;
+//     document.getElementById('editJamb').value = subscriber.jambregnumber;
+//     document.getElementById('editSeatNumber').value = subscriber.seatnumber;
+//     // Ensure the assistancePackage field is correctly populated
+//     document.getElementById('editPackage').value = subscriber.assistancePackage || '';  // Fallback to empty if not set
+//     document.getElementById('editScore').value = subscriber.score;
+//     document.getElementById('editAmountPaid').value = subscriber.amountPaid;
+//     document.getElementById('editPaymentDetails').value = subscriber.paymentDetails;
+// }
+
+
+function fillEditForm(subscriber) {
+    document.getElementById('editFullName').value = subscriber.fullName;
+    document.getElementById('editState').value = subscriber.stateOfOrigin;
+    document.getElementById('editAge').value = subscriber.age;
+    document.getElementById('editJamb').value = subscriber.jambregnumber;
+    document.getElementById('editSeatNumber').value = subscriber.seatnumber;
+
+    // Log to check the original value of assistancePackage from the backend
+    console.log("Assistance Package from Backend:", subscriber.assistancePackage);
+
+    let assistancePackageValue = subscriber.assistancePackage;
+
+    // Check if the value matches the expected values in the dropdown
+    if (assistancePackageValue === "Full Payment") {
+        assistancePackageValue = "DIRECT TO SYSTEM PACKAGE";
+    } else if (assistancePackageValue === "Half Payment") {
+        assistancePackageValue = "DIRECT TO MOBILE PACKAGE";
+    } else if (assistancePackageValue === "Merge Package") {
+        assistancePackageValue = "MERGE PACKAGE";
+    } else if (assistancePackageValue === "Per Subject Package") {
+        assistancePackageValue = "PER SUBJECT PACKAGE";
+    } else {
+        // Add a log for unexpected values
+        console.log("Unexpected Assistance Package Value:", assistancePackageValue);
+    }
+
+    // Log the mapped value before setting it to the dropdown
+    console.log("Mapped Assistance Package Value to Dropdown:", assistancePackageValue);
+
+    // Ensure dropdown value is being set correctly
+    const dropdown = document.getElementById('editPackage');
+    let valueSet = false;
+    
+    // Loop through dropdown options to check if the mapped value exists
+    for (let option of dropdown.options) {
+        if (option.text === assistancePackageValue) {
+            dropdown.value = option.value;
+            valueSet = true;
+            break;
+        }
+    }
+
+    // If the value is not found, log an error
+    if (!valueSet) {
+        console.log("Error: No matching value found for the assistance package in dropdown.");
+    }
+
+    // Set other form fields
+    document.getElementById('editScore').value = subscriber.score;
+    document.getElementById('editAmountPaid').value = subscriber.amountPaid;
+    document.getElementById('editPaymentDetails').value = subscriber.paymentDetails;
+}
+
+
+
+
+
+// Handle form submission
+document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+    e.preventDefault();  // Prevent form submission
+
+    const updatedProfile = {
+        fullName: document.getElementById('editFullName').value,
+        stateOfOrigin: document.getElementById('editState').value,
+        age: document.getElementById('editAge').value,
+        jambregnumber: document.getElementById('editJamb').value,
+        seatnumber: document.getElementById('editSeatNumber').value,
+        assistancePackage: document.getElementById('editPackage').value,
+        score: document.getElementById('editScore').value,
+        amountPaid: document.getElementById('editAmountPaid').value,
+        paymentDetails: document.getElementById('editPaymentDetails').value,
+    };
+
+    const loginID = localStorage.getItem('subscriberLoginID');
+    const subscriberID = JSON.parse(localStorage.getItem('subscriberProfile'))?.id; // Assuming profile ID is saved in localStorage
+
+    if (!subscriberID) {
+        alert('Profile ID not found!');
+        return;
+    }
+
+    // Make API request to update the profile using the subscriber ID
+    fetch(`${apiUrl}/${subscriberID}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProfile)
+    })
+    .then(response => response.json())
+    .then(updatedSubscriber => {
+        console.log("Updated Profile Data:", updatedSubscriber);  // Debugging log
+        alert('Profile updated successfully!');
+        displayProfile(updatedSubscriber);  // Update the profile on page
+        localStorage.setItem('subscriberProfile', JSON.stringify(updatedSubscriber)); // Update localStorage
+        document.getElementById('editForm').style.display = 'none'; // Hide edit form
+    })
+    .catch(error => {
+        console.error('Error updating profile:', error);
+        alert('An error occurred while updating the profile.');
+    });
+});
+
+
+// Initialize the page by fetching the profile
+fetchProfile();
+</script>
+
+</body>
+</html>

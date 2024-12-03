@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 50px;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .form-input {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .form-input label {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-input input {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            display: none;
+        }
+
+        .secondary-button {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .secondary-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Candidate Database Login</h2>
+    <form id="loginForm">
+        <div class="form-input">
+            <label for="candidateId">Enter Candidate ID</label>
+            <input type="text" id="candidateId" placeholder="Enter your Candidate ID" required>
+        </div>
+        <button type="submit">Login</button>
+    </form>
+    <p class="error-message" id="error-message">Invalid Candidate ID. Please check and try again.</p>
+    <button class="secondary-button" onclick="window.location.href='form1.html'">Get a Candidate ID</button>
+</div>
+
+<script>
+    // Debug: Check if any subscriberLoginID exists in localStorage
+    console.log("Stored Candidate ID (on page load):", localStorage.getItem('subscriberLoginID'));
+
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const enteredId = document.getElementById('candidateId').value.trim();
+        const storedId = localStorage.getItem('subscriberLoginID'); // Retrieve login ID from localStorage
+
+        // Logging for debugging
+        console.log('Entered Candidate ID:', enteredId);
+        console.log('Stored Candidate ID:', storedId);
+
+        if (storedId && enteredId === storedId) {
+            window.location.href = 'dashboard.html'; // Redirect to the dashboard
+        } else {
+            // Show error message
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = storedId
+                ? "Invalid Candidate ID. Please check and try again."
+                : "No Candidate ID found. Please register first.";
+            errorMessage.style.display = 'block';
+        }
+    });
+</script>
+
+</body>
+</html>

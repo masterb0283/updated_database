@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-container {
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: rgb(21, 168, 95);
+            margin-top: 50px;
+        }
+        .form-input {
+            margin: 10px 0;
+        }
+        .form-input input {
+            padding: 10px;
+            width: 80%;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <form id="adminLoginForm">
+            <div class="form-input">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-input">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div id="loginMessage"></div>
+    </div>
+
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            // Simple hardcoded admin check
+            if (username === 'admin' && password === 'admin123') {
+                // Store admin login session
+                sessionStorage.setItem('adminLoggedIn', true);
+                window.location.href = 'admin.html'; // Redirect to the dashboard
+            } else {
+                document.getElementById('loginMessage').innerHTML = 'Invalid credentials';
+                document.getElementById('loginMessage').style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>

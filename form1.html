@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscriber Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .container {
+            width: 90%; /* Adjusted for mobile devices */
+            max-width: 600px; /* Optional max width */
+            margin: auto;
+            text-align: center;
+        }
+
+        .edit-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(21, 168, 95);
+            padding: 20px;
+            border: 1px solid #ddd;
+            z-index: 1000;
+            max-height: 80%;
+            overflow-y: auto;
+            width: 80%; /* Default width */
+        }
+
+        @media (max-width: 600px) {
+            .edit-form {
+                width: 90%; /* Fit mobile screen */
+            }
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .form-input {
+            display: flex;
+            flex-direction: column;
+            margin: 10px 0;
+            margin-left: 50px;
+            text-align: left;
+            justify-content: center;
+        }
+
+        .form-input input,
+        .form-input select {
+            padding: 10px; /* Increased padding for better touch */
+            width: 70%;
+        }
+
+        button {
+            padding: 10px 15px; /* More padding for mobile */
+            background-color: #4CAF50;
+            color: rgb(182, 9, 9);
+            border: none;
+            cursor: pointer;
+            font-size: 16px; /* Larger font size */
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .admin-login {
+            margin-top: 20px;
+        }
+
+        .form-input label {
+            display: block; /* Each label on a new line */
+            margin-bottom: 5px; /* Add some spacing */
+        }
+
+        .passport-box img {
+            max-width: 200px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMgy4cO4X2ALDAvxQgZthqJdGYara1kXpyLg&s" alt="Logo"
+        width="550px"></div>
+    <h1 style="font-size: 21px;color: red;">REGISTER YOUR DETAILS NOW</h1>
+    <form id="subscriberForm">
+        <div class="form-input" style="margin-left: 29%;">
+            <label for="fullName">Your Full Name</label>
+            <input type="text" id="fullName" placeholder="Enter your name" required>
+        </div>
+        <div class="hold1">
+            <div class="form-input">
+                <label for="stateoforigin">YOUR STATE OF ORIGIN</label>
+                <input type="text" id="stateOfOrigin" placeholder="input your state" value="" required>
+            </div>
+            <div class="form-input">
+                <label for="age">YOUR AGE</label>
+                <input type="number" id="ageInput" placeholder="input your age" value="" required>
+            </div>
+        </div>
+        <div class="hold2">
+            <div class="form-input">
+                <label for="Jambregistrationnumber">YOUR JAMB REGISTRATION NUMBER</label>
+                <input type="text" id="jambRegNumber" placeholder="input your jamb registration number" value="not available now" required>
+            </div>
+            <div class="form-input">
+                <label for="seatnumber">SEAT NUMBER</label>
+                <input type="text" id="seatNumber" placeholder="Enter seat number" value="not available now" required>
+            </div>
+        </div>
+
+        <div class="form-input">
+            <label for="assistancepackage">THE ASSISTANCE PACKAGE</label>
+            <select id="package" required>
+                <option value="">Select your assistance package type</option>
+                <option value="Direct to system">DIRECT TO SYSTEM PACKAGE</option>
+                <option value="Direct to Mobile">DIRECT TO MOBILE PACKAGE</option>
+                <option value="Merge Package">MERGE PACKAGE</option>
+                <option value="Per Subject Package">PER SUBJECT PACKAGE</option>
+                
+            </select>
+        </div>
+
+        <div class="form-input">
+            <label for="score">Your Desire Score</label>
+            <input type="number" id="score" placeholder="Enter your Desire Score" required>
+        </div>
+
+        <div class="form-input">
+            <label for="amountPaid">Input the Amount You Have Paid</label>
+            <input type="number" id="amountPaid" placeholder="Enter amount you have paid" required>
+        </div>
+
+        <div class="form-input">
+            <label for="paymentDetails">Payment Details</label>
+            <select id="paymentDetails" required>
+                <option value="">Select payment type</option>
+                <option value="Full Payment">Full Payment</option>
+                <option value="Half Payment">Half Payment</option>
+                <option value="Deposit Payment">Deposit Payment</option>
+            </select>
+        </div>
+
+        <div id="passport-text">
+            <label for="passport">Upload Passport:</label>
+            <input type="file" id="passport" name="passport" accept="image/*" required>
+        </div>
+        
+        <div class="passport-box">
+            <img id="passportPreview" src="" alt="Passport Preview">
+        </div>
+
+        <button type="submit">Register  Now</button>
+    </form>
+    <div id="message"></div>
+
+    <div >
+        <button class="tohome" onclick="window.location.href='index.html'" style="margin-top: 50px;background-color: black;color: white;">check your database</button>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="edit-form" id="editForm">
+        <h2>Update Your Details</h2>
+        <!-- Form Inputs for editing -->
+        <!-- Omitted for brevity (same structure as above) -->
+        <button id="saveChanges">Save Changes</button>
+        <button id="cancelEdit">Cancel</button>
+    </div>
+
+    <div class="admin-login">
+        <a href="login.html"><button>Admin Login [EXAM SUCCESS OFFICIAL BEN]</button></a>
+    </div>
+</div>
+
+<script>
+    // Define the API URL
+    const apiUrl = 'https://674c915a54e1fca9290cf563.mockapi.io/Subscriber';
+
+    // Event listener for the form submission
+/// Event listener for the form submission
+document.getElementById('subscriberForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const formData = collectFormData();
+
+    if (!validateFormData(formData)) {
+        return;
+    }
+
+    // Generate a unique login ID
+    formData.loginID = generateLoginID();
+
+    // Get the uploaded passport file
+    const passportFile = document.getElementById('passport').files[0];
+
+    // 1. File size validation (10MB limit)
+    if (passportFile && passportFile.size > 10000000) { // 10MB limit
+        alert('The uploaded file is too large. Please select a smaller image.');
+        return; // Prevent form submission
+    }
+
+    // 2. Validate the file type (accept jpg, jpeg, and png)
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (passportFile && !allowedTypes.includes(passportFile.type)) {
+        alert('Invalid file type. Please upload an image (JPG, JPEG, PNG).');
+        return; // Prevent form submission
+    }
+
+    // 3. Log the file size for debugging
+    console.log('File size:', passportFile.size);
+
+    // 4. Log the file type for debugging
+    console.log('File type:', passportFile.type);
+
+    // 5. Convert image to Base64
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        formData.passport = event.target.result;
+        submitFormData(formData);
+    };
+
+    reader.readAsDataURL(passportFile);
+});
+
+
+    
+
+    // Function to collect form data
+    function collectFormData() {
+        return {
+            fullName: document.getElementById('fullName').value.trim(),
+            age: parseInt(document.getElementById('ageInput').value.trim(), 10),
+            seatNumber: document.getElementById('seatNumber').value.trim(),
+            jambRegNumber: document.getElementById('jambRegNumber').value.trim(),
+            stateOfOrigin: document.getElementById('stateOfOrigin').value.trim(),
+            assistancePackage: document.getElementById('package').value.trim(), // Correct ID
+            score: parseInt(document.getElementById('score').value.trim(), 10),
+            amountPaid: parseInt(document.getElementById('amountPaid').value.trim(), 10),
+            paymentDetails: document.getElementById('paymentDetails').value.trim(), // Correct ID
+        };
+    }
+
+    // Function to validate form data
+    function validateFormData(data) {
+        const requiredFields = ['fullName', 'age', 'seatNumber', 'jambRegNumber', 'stateOfOrigin',
+            'assistancePackage', 'score', 'amountPaid', 'paymentDetails'];
+
+        for (const field of requiredFields) {
+            if (!data[field]) {
+                alert("Please fill in all fields.");
+                return false;
+            }
+        }
+
+        if (data.age < 15 || data.age > 30) {
+            alert("Age must be between 15 and 30.");
+            return false;
+        }
+
+        if (data.score < 100 || data.score > 350) {
+            alert("Score must be between 100 and 350.");
+            return false;
+        }
+
+        if (!document.getElementById('passport').files[0]) {
+            alert("Please upload your passport.");
+            return false;
+        }
+
+        return true;
+    }
+
+    // Function to generate a unique login ID
+    function generateLoginID() {
+        return `ID-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    }
+
+    // Function to submit form data
+    function submitFormData(data) {
+        console.log("Submitting Data:", data); // Debugging: Log data before submission
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(serverResponse => {
+                localStorage.setItem('subscriberLoginID', serverResponse.loginID);
+
+                displayMessage(
+                    `Registration successful! <br>Your Login ID: <strong>${serverResponse.loginID}</strong>`,
+                    'green'
+                );
+
+                resetForm();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                displayMessage("Registration failed. Please try again.", 'red');
+            });
+
+        // Debugging: Verify stored data
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Stored Data on the Server:", data);
+                const latestEntry = data[data.length - 1];
+                console.log("Latest Assistance Package:", latestEntry.assistancePackage);
+            })
+            .catch(error => console.error("Error fetching stored data:", error));
+    }
+
+    // Function to display messages
+    function displayMessage(message, color) {
+        const messageContainer = document.getElementById('message');
+        messageContainer.innerHTML = message;
+        messageContainer.style.color = color;
+    }
+
+    // Function to reset the form
+    function resetForm() {
+        document.getElementById('subscriberForm').reset();
+        document.getElementById('passportPreview').style.display = 'none';
+    }
+
+    // Event listener for passport preview
+    document.getElementById('passport').addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const preview = document.getElementById('passportPreview');
+                preview.style.display = 'block';
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('passportPreview').style.display = 'none';
+        }
+    });
+
+    
+
+</script>
+
+
+</body>
+</html>
