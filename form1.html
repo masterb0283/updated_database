@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subscriber Form</title>
+    <title>Subscriber Database</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .container {
@@ -90,9 +90,12 @@
 </head>
 <body>
 
+
+
 <div class="container">
     <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMgy4cO4X2ALDAvxQgZthqJdGYara1kXpyLg&s" alt="Logo"
         width="550px"></div>
+        <b style="color: brown; font-size: 30; margin-top: 60px;">OFFICIAL DAN 2025 JAMB SUBSUBSCRIBER DATABASE</b>
     <h1 style="font-size: 21px;color: red;">REGISTER YOUR DETAILS NOW</h1>
     <form id="subscriberForm">
         <div class="form-input" style="margin-left: 29%;">
@@ -153,8 +156,9 @@
         </div>
 
         <div id="passport-text">
-            <label for="passport">Upload Passport:</label>
+            <label for="passport">Upload Your Passport:</label>
             <input type="file" id="passport" name="passport" accept="image/*" required>
+
         </div>
         
         <div class="passport-box">
@@ -166,7 +170,7 @@
     <div id="message"></div>
 
     <div >
-        <button class="tohome" onclick="window.location.href='index.html'" style="margin-top: 50px;background-color: black;color: white;">check your database</button>
+        <button class="tohome" onclick="window.location.href='index.html'" style="margin-top: 50px;background-color: black;color: white;">Check Your Database Profile</button>
     </div>
 
     <div class="overlay" id="overlay"></div>
@@ -179,7 +183,7 @@
     </div>
 
     <div class="admin-login">
-        <a href="login.html"><button>Admin Login [EXAM SUCCESS OFFICIAL BEN]</button></a>
+        <a href="login.html"><button style="background-color: red; color: white;">FOR ADMIN ONLY</button></a>
     </div>
 </div>
 
@@ -222,15 +226,48 @@ document.getElementById('subscriberForm').addEventListener('submit', function (e
     // 4. Log the file type for debugging
     console.log('File type:', passportFile.type);
 
-    // 5. Convert image to Base64
-    const reader = new FileReader();
-    reader.onload = function (event) {
-        formData.passport = event.target.result;
-        submitFormData(formData);
-    };
-
-    reader.readAsDataURL(passportFile);
+    // Resize the image
+    resizeImage(passportFile, 400, 400, function(resizedImage) {
+        formData.passport = resizedImage; // Store resized image in Base64 format
+        submitFormData(formData); // Submit the form data
+    });
 });
+
+// Resize the image function
+function resizeImage(file, maxWidth, maxHeight, callback) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+
+            // Calculate new dimensions while maintaining aspect ratio
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Convert resized image to base64 string and call the callback
+            callback(canvas.toDataURL('image/jpeg'));
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 
 
     
@@ -267,8 +304,8 @@ document.getElementById('subscriberForm').addEventListener('submit', function (e
             return false;
         }
 
-        if (data.score < 100 || data.score > 350) {
-            alert("Score must be between 100 and 350.");
+        if (data.score < 100 || data.score > 380) {
+            alert("Score must be between 100 and 380.");
             return false;
         }
 
@@ -300,7 +337,7 @@ document.getElementById('subscriberForm').addEventListener('submit', function (e
                 localStorage.setItem('subscriberLoginID', serverResponse.loginID);
 
                 displayMessage(
-                    `Registration successful! <br>Your Login ID: <strong>${serverResponse.loginID}</strong>`,
+                    `Registration successful! <br >Your Login ID: <strong>${serverResponse.loginID}</strong>`,
                     'green'
                 );
 
