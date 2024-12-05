@@ -15,9 +15,10 @@
         background-image: url('https://ulesson.com/blog/wp-content/uploads/2021/06/Jamb-Preparation.jpg');
     }
     100% {
-        background-image: url('https://jamb2025.com/wp-content/uploads/2023/11/JAMB-11.png');
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMgy4cO4X2ALDAvxQgZthqJdGYara1kXpyLg&s');
     }
 } */
+
 
 
 /* Background Video */
@@ -49,19 +50,19 @@
     z-index: 1; /* Ensures text appears above the video */
   }
   
-  .container {
+  /* .container {
     margin: auto;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
+  } */
   
 
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    color: #333;
+    color: rgb(14, 167, 98);
     animation: backgroundAnimation 15s infinite;
     background-size: cover;
     background-position: center;
@@ -70,7 +71,7 @@ body {
 .container {
     margin: auto;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(7, 7, 7, 0.8);
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -146,3 +147,4 @@ img {
     margin-left: 3px;
    width: 80px; 
 }
+
