@@ -99,6 +99,16 @@
 </head>
 <body>
 
+    <div class="video-background">
+        <video autoplay muted loop id="background-video">
+          <source src="./WhatsApp Video 2024-12-05 at 22.23.00_4eb61762.mp4" type="video/mp4">
+          <!-- Add additional formats for cross-browser compatibility -->
+          <source src="./WhatsApp Video 2024-12-05 at 22.23.00_4eb61762.mp4" type="video/webm">
+          <source src="./WhatsApp Video 2024-12-05 at 22.23.00_4eb61762.mp4" type="video/ogv">
+        </video>
+      </div>
+      
+
 <div class="dashboard-container">
     <h2>Welcome to Your Personal Database Dashboard</h2>
 
@@ -230,8 +240,9 @@ function displayProfile(subscriber) {
         <p><span>Full Name:</span> ${subscriber.fullName || 'N/A'}</p>
         <p><span>State of Origin:</span> ${subscriber.stateOfOrigin || 'N/A'}</p>
         <p><span>Age:</span> ${subscriber.age || 'N/A'}</p>
-        <p><span>JAMB Registration Number:</span> ${subscriber.jambregnumber || 'N/A'}</p>
-        <p><span>Seat Number:</span> ${subscriber.seatnumber || 'N/A'}</p>
+<p><span>JAMB Registration Number:</span> ${subscriber.jambregnumber || 'NOT AVAILABLE NOW'}</p>
+<p><span>Seat Number:</span> ${subscriber.seatnumber || 'NOT AVAILABLE NOW'}</p>
+
         <p><span>Assistance Package:</span> ${subscriber.assistancePackage || 'N/A'}</p>
         <p><span>Desired Score:</span> ${subscriber.score || 'N/A'}</p>
         <p><span>Amount Paid:</span> ${subscriber.amountPaid || 'N/A'}</p>
@@ -301,8 +312,9 @@ function fillEditForm(subscriber) {
     document.getElementById('editFullName').value = subscriber.fullName;
     document.getElementById('editState').value = subscriber.stateOfOrigin;
     document.getElementById('editAge').value = subscriber.age;
-    document.getElementById('editJamb').value = subscriber.jambregnumber;
-    document.getElementById('editSeatNumber').value = subscriber.seatnumber;
+    document.getElementById('editJamb').value = subscriber.jambregnumber || 'NOT AVAILABLE NOW';
+document.getElementById('editSeatNumber').value = subscriber.seatnumber || 'NOT AVAILABLE NOW';
+
 
     // Log to check the original value of assistancePackage from the backend
     console.log("Assistance Package from Backend:", subscriber.assistancePackage);
