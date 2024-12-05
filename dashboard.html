@@ -191,12 +191,16 @@
    const apiUrl = "https://674c915a54e1fca9290cf563.mockapi.io/Subscriber";
 
 // Function to fetch profile data
+// Function to fetch profile data
 function fetchProfile() {
     const loginID = localStorage.getItem('subscriberLoginID');
     if (!loginID) {
         document.getElementById('error-message').innerText = 'No valid login ID found. Please log in again.';
         return;
     }
+
+    // Show the alert message once the login is successful
+    alert('Dear candidate, if you are yet to subscribe, your details will be removed after 24hrs. So message OFFICIAL DAN NOW TO MAKE PAYMENT 09027420688 to secure your slot on the database');
 
     // Make API request to fetch the subscriber data by login ID
     fetch(`${apiUrl}?loginID=${loginID}`)

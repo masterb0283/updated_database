@@ -102,6 +102,15 @@
             <label for="fullName">Your Full Name</label>
             <input type="text" id="fullName" placeholder="Enter your name" required>
         </div>
+
+        <div class="form-input">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Enter your phone number" required pattern="[0-9]{10,15}">
+        </div>
+
+
+
+
         <div class="hold1">
             <div class="form-input">
                 <label for="stateoforigin">YOUR STATE OF ORIGIN</label>
@@ -272,50 +281,58 @@ function resizeImage(file, maxWidth, maxHeight, callback) {
 
     
 
-    // Function to collect form data
-    function collectFormData() {
-        return {
-            fullName: document.getElementById('fullName').value.trim(),
-            age: parseInt(document.getElementById('ageInput').value.trim(), 10),
-            seatNumber: document.getElementById('seatNumber').value.trim(),
-            jambRegNumber: document.getElementById('jambRegNumber').value.trim(),
-            stateOfOrigin: document.getElementById('stateOfOrigin').value.trim(),
-            assistancePackage: document.getElementById('package').value.trim(), // Correct ID
-            score: parseInt(document.getElementById('score').value.trim(), 10),
-            amountPaid: parseInt(document.getElementById('amountPaid').value.trim(), 10),
-            paymentDetails: document.getElementById('paymentDetails').value.trim(), // Correct ID
-        };
+    // Collect form data
+function collectFormData() {
+    return {
+        fullName: document.getElementById('fullName').value.trim(),
+        phone: document.getElementById('phone').value.trim(), // New field
+        age: parseInt(document.getElementById('ageInput').value.trim(), 10),
+        seatNumber: document.getElementById('seatNumber').value.trim(),
+        jambRegNumber: document.getElementById('jambRegNumber').value.trim(),
+        stateOfOrigin: document.getElementById('stateOfOrigin').value.trim(),
+        assistancePackage: document.getElementById('package').value.trim(),
+        score: parseInt(document.getElementById('score').value.trim(), 10),
+        amountPaid: parseInt(document.getElementById('amountPaid').value.trim(), 10),
+        paymentDetails: document.getElementById('paymentDetails').value.trim(),
+    };
+}
+
+// Validate form data
+function validateFormData(data) {
+    const requiredFields = ['fullName', 'phone', 'age', 'seatNumber', 'jambRegNumber', 
+                            'stateOfOrigin', 'assistancePackage', 'score', 'amountPaid', 'paymentDetails'];
+
+    for (const field of requiredFields) {
+        if (!data[field]) {
+            alert("Please fill in all fields.");
+            return false;
+        }
     }
 
-    // Function to validate form data
-    function validateFormData(data) {
-        const requiredFields = ['fullName', 'age', 'seatNumber', 'jambRegNumber', 'stateOfOrigin',
-            'assistancePackage', 'score', 'amountPaid', 'paymentDetails'];
-
-        for (const field of requiredFields) {
-            if (!data[field]) {
-                alert("Please fill in all fields.");
-                return false;
-            }
-        }
-
-        if (data.age < 15 || data.age > 30) {
-            alert("Age must be between 15 and 30.");
-            return false;
-        }
-
-        if (data.score < 100 || data.score > 380) {
-            alert("Score must be between 100 and 380.");
-            return false;
-        }
-
-        if (!document.getElementById('passport').files[0]) {
-            alert("Please upload your passport.");
-            return false;
-        }
-
-        return true;
+    // Phone validation
+    const phonePattern = /^[0-9]{10,15}$/;
+    if (!phonePattern.test(data.phone)) {
+        alert("Please enter a valid phone number (10-15 digits).");
+        return false;
     }
+
+    if (data.age < 15 || data.age > 30) {
+        alert("Age must be between 15 and 30.");
+        return false;
+    }
+
+    if (data.score < 100 || data.score > 380) {
+        alert("Score must be between 100 and 380.");
+        return false;
+    }
+
+    if (!document.getElementById('passport').files[0]) {
+        alert("Please upload your passport.");
+        return false;
+    }
+
+    return true;
+}
 
     // Function to generate a unique login ID
     function generateLoginID() {
