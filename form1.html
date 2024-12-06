@@ -92,9 +92,11 @@
     <div class="video-background">
         <video autoplay muted loop playsinline id="background-video">
             <source src="./WhatsApp Video 2024-12-05 at 22.23.00_4eb61762.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
+            <source src="./WhatsApp Video 2024-12-05 at 22.23.00_4eb61762.mp4" type="video/webm">
+            <source src="./WhatsApp Video 2024-12-05 at 22.23.00_4eb61762.mp4" type="video/ogv">
+          </video>
+      </div>
+
 
 <div class="container">
     <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMgy4cO4X2ALDAvxQgZthqJdGYara1kXpyLg&s" alt="Logo"
@@ -201,6 +203,17 @@
 </div>
 
 <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    var video = document.getElementById('background-video');
+    if (video.paused) {
+        video.play();
+    }
+  });
+
+
+
+
     // Define the API URL
     const apiUrl = 'https://674c915a54e1fca9290cf563.mockapi.io/Subscriber';
 
