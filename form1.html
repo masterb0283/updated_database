@@ -102,7 +102,7 @@
     <div><img src="./download.jpg" alt="Logo"
         width="550px"></div>
         <b style="color: rgb(6, 199, 54); font-size: 30; margin-top: 60px;">OFFICIAL DAN 2025 JAMB SUBSUBSCRIBER DATABASE</b>
-    <h1 style="font-size: 21px;color: red;">REGISTER YOUR DETAILS NOW</h1>
+    <h1 style="font-size: 21px;color: red;">Submit Your Details for Official Registration</h1>
     <form id="subscriberForm">
         <div class="form-input" style="margin-left: 29%;">
             <label for="fullName">Your Full Name</label>
@@ -133,17 +133,17 @@
         </div>
         <div class="hold2">
             <div class="form-input">
-                <label for="Jambregistrationnumber">YOUR JAMB REGISTRATION NUMBER</label>
-                <input type="text" id="jambRegNumber" placeholder="input your jamb registration number" value="not available now" required>
+                <label for="Jambregistrationnumber">YOUR  REGISTRATION NUMBER</label>
+                <input type="text" id="jambRegNumber" placeholder="input your  registration number" value="not register yet" required>
             </div>
             <div class="form-input">
                 <label for="seatnumber">SEAT NUMBER</label>
-                <input type="text" id="seatNumber" placeholder="Enter seat number" value="not available now" required>
+                <input type="text" id="seatNumber" placeholder="Enter seat number" value="not register yet" required>
             </div>
         </div>
 
         <div class="form-input">
-            <label for="assistancepackage">THE ASSISTANCE PACKAGE</label>
+            <label for="assistancepackage">Select Assistance Package</label>
             <select id="package" required>
                 <option value="">Select your assistance package type</option>
                 <option value="Direct to system">DIRECT TO SYSTEM PACKAGE</option>
@@ -362,6 +362,15 @@ function validateFormData(data) {
         return `ID-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     }
 
+    function sanitizeInput(value) {
+    const sanitized = value.replace(/[^a-zA-Z0-9\s]/g, '').trim();
+    return sanitized;
+}
+
+
+
+
+
     // Function to submit form data
     function submitFormData(data) {
         console.log("Submitting Data:", data); // Debugging: Log data before submission
@@ -387,6 +396,9 @@ function validateFormData(data) {
                 console.error('Error:', error);
                 displayMessage("Registration failed. Please try again.", 'red');
             });
+            formData.fullName = sanitizeInput(document.getElementById('fullName').value);
+formData.stateOfOrigin = sanitizeInput(document.getElementById('stateOfOrigin').value);
+
 
         // Debugging: Verify stored data
         fetch(apiUrl)
@@ -398,6 +410,8 @@ function validateFormData(data) {
             })
             .catch(error => console.error("Error fetching stored data:", error));
     }
+
+    
 
     // Function to display messages
     function displayMessage(message, color) {
